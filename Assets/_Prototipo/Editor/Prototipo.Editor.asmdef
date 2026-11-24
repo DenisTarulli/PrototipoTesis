@@ -1,0 +1,20 @@
+{
+    "name": "Prototipo.Editor",
+    "rootNamespace": "Prototipo.EditorTools",
+    "references": [
+        "Prototipo",
+        "UnityEngine.UI",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
