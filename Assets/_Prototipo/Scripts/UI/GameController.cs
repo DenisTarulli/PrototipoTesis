@@ -203,8 +203,8 @@ namespace Prototipo
             session.RecordPuzzle(record);
             if (session.AllSlotsPlayed)
             {
-                session.FinishSession();
-                SceneNames.Load(SceneNames.End);
+                session.FinishGameplay();
+                SceneNames.Load(SceneNames.Survey);
             }
             else
             {

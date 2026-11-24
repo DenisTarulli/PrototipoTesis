@@ -11,7 +11,7 @@ namespace Prototipo
     [Serializable]
     public class SessionRecord
     {
-        public const string CurrentSchemaVersion = "2";
+        public const string CurrentSchemaVersion = "3";
 
         // Identificación (anónima)
         public string schemaVersion = CurrentSchemaVersion;
@@ -62,6 +62,41 @@ namespace Prototipo
         public int abandonedAtSlot = -1;   // número de slot (1-based) donde abandonó
 
         public List<PuzzleRecord> puzzles = new List<PuzzleRecord>();
+
+        // Encuesta final (Anexo A). totalSessionSeconds NO incluye el tiempo de la encuesta.
+        public string gameplayEndedAtUtc;
+        public bool surveyCompleted;
+        public float surveySeconds;
+        public SurveyRecord survey = new SurveyRecord();
+    }
+
+    /// <summary>
+    /// Respuestas de la encuesta del Anexo A. Las escalas van de 1 a 5 (Anexo C); 0 = sin respuesta.
+    /// Las opciones cerradas se guardan como códigos en inglés, independientes del idioma del juego.
+    /// </summary>
+    [Serializable]
+    public class SurveyRecord
+    {
+        public int q01_entertaining;        // ¿Qué tan entretenida te resultó la experiencia?
+        public int q02_challenging;         // ¿Qué tan desafiante consideraste el nivel de dificultad?
+        public int q03_matchedSkills;       // ¿La dificultad se ajustó adecuadamente a tus habilidades?
+        public int q04_frustration;         // ¿Experimentaste momentos de frustración?
+        public int q05_boredom;             // ¿Sentiste aburrimiento debido a una baja dificultad?
+        public int q06_consistent;          // ¿El nivel de dificultad fue consistente?
+        public int q07_satisfaction;        // ¿Qué tan satisfecho/a estás con la experiencia general?
+        public int q08_tooHard;             // ¿Sentiste que el juego era demasiado difícil?
+        public int q09_tooEasy;             // ¿Sentiste que el juego era demasiado fácil?
+        public int q10_progress;            // ¿Sentiste que progresabas?
+        public int q11_motivation;          // ¿Qué tan motivado/a te sentiste para continuar?
+        public int q12_attention;           // ¿El juego mantuvo tu atención?
+        public int q13_hintsUseful;         // 1-5; -1 = "No utilicé ayudas"
+        public string q14_noticedChanges;   // "yes" | "no" | "unsure"
+        public int q15_changesNatural;      // 1-5; -1 = no aplica (no percibió cambios)
+        public int q16_rewarded;            // ¿El juego recompensó adecuadamente tu desempeño?
+        public string q17_playAgain;        // "yes" | "no" | "maybe"
+        public int q18_recommend;           // ¿Recomendarías este juego?
+        public string q19_enjoyedMost;      // abierta
+        public string q20_improve;          // abierta
     }
 
     /// <summary>Métricas de un puzzle individual.</summary>

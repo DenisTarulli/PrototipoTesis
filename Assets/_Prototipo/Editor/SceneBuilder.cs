@@ -51,6 +51,7 @@ namespace Prototipo.EditorTools
             BuildMainMenu();
             BuildConsent();
             BuildGame();
+            BuildSurvey();
             BuildEnd();
             UpdateBuildSettings();
         }
@@ -301,6 +302,89 @@ namespace Prototipo.EditorTools
             overlay.SetActive(false);
 
             SaveScene(SceneNames.Game);
+        }
+
+        private static void BuildSurvey()
+        {
+            var root = NewScene();
+            var c = AddController<SurveyController>();
+
+            var card = UIFactory.CreateCard(root, "SurveyCard", 1500, 48, 18);
+            Title(card, "survey.title", 40);
+            UIFactory.CreateText(card, "Intro", "survey.intro", 22, UITheme.TextSecondary, TextAnchor.MiddleCenter);
+
+            string[] scale = { "1", "2", "3", "4", "5" };
+            int[] scaleValues = { 1, 2, 3, 4, 5 };
+            const string low = "survey.low", high = "survey.high";
+
+            var pages = new GameObject[SurveyController.Pages.Length];
+            for (int p = 0; p < pages.Length; p++)
+            {
+                var page = UIFactory.NewRect("Page" + (p + 1), card);
+                var vlg = page.gameObject.AddComponent<VerticalLayoutGroup>();
+                vlg.spacing = 26;
+                vlg.childAlignment = TextAnchor.UpperLeft;
+                vlg.childControlWidth = true;
+                vlg.childControlHeight = true;
+                vlg.childForceExpandWidth = true;
+                vlg.childForceExpandHeight = false;
+                UIFactory.Layout(page, minHeight: 560, preferredHeight: 560);
+
+                foreach (int q in SurveyController.Pages[p])
+                {
+                    string key = $"survey.q{q:00}";
+                    string name = $"Q{q:00}";
+                    switch (q)
+                    {
+                        case 13:
+                            c.selectors[q - 1] = UIFactory.CreateSurveyQuestion(page, name, key,
+                                new[] { "1", "2", "3", "4", "5" }, scaleValues, false, low, high);
+                            // Opción extra "No utilicé ayudas" en la misma fila
+                            var noHints = UIFactory.CreateButton(c.selectors[q - 1].transform.Find("Options"), "OptionNoHints", "survey.noHints",
+                                UITheme.SurfaceAlt, UITheme.TextPrimary, 230, 52, 20);
+                            var sel = c.selectors[q - 1];
+                            sel.buttons = new[] { sel.buttons[0], sel.buttons[1], sel.buttons[2], sel.buttons[3], sel.buttons[4], noHints };
+                            sel.values = new[] { 1, 2, 3, 4, 5, SurveyController.NoHintsUsed };
+                            break;
+                        case 14:
+                            c.selectors[q - 1] = UIFactory.CreateSurveyQuestion(page, name, key,
+                                new[] { "survey.yes", "survey.no", "survey.unsure" },
+                                new[] { SurveyController.Yes, SurveyController.No, SurveyController.Third }, true);
+                            break;
+                        case 17:
+                            c.selectors[q - 1] = UIFactory.CreateSurveyQuestion(page, name, key,
+                                new[] { "survey.yes", "survey.no", "survey.maybe" },
+                                new[] { SurveyController.Yes, SurveyController.No, SurveyController.Third }, true);
+                            break;
+                        case 19:
+                            UIFactory.CreateText(page, name + "Text", key, 25, UITheme.TextPrimary, TextAnchor.MiddleLeft, FontStyle.Bold);
+                            c.q19Input = UIFactory.CreateInputField(page, name + "Input", "survey.placeholder", 96, 1000);
+                            break;
+                        case 20:
+                            UIFactory.CreateText(page, name + "Text", key, 25, UITheme.TextPrimary, TextAnchor.MiddleLeft, FontStyle.Bold);
+                            c.q20Input = UIFactory.CreateInputField(page, name + "Input", "survey.placeholder", 96, 1000);
+                            break;
+                        default:
+                            c.selectors[q - 1] = UIFactory.CreateSurveyQuestion(page, name, key, scale, scaleValues, false, low, high);
+                            break;
+                    }
+                }
+
+                pages[p] = page.gameObject;
+                page.gameObject.SetActive(p == 0);
+            }
+            c.pagePanels = pages;
+
+            c.warningText = UIFactory.CreateText(card, "Warning", null, 22, UITheme.Danger, TextAnchor.MiddleCenter, literal: "");
+            var nav = UIFactory.CreateRow(card, "Navigation", 24);
+            c.backButton = UIFactory.SecondaryButton(nav, "BackButton", "survey.back", 260);
+            c.progressText = UIFactory.CreateText(nav, "Progress", null, 22, UITheme.TextSecondary, TextAnchor.MiddleCenter, literal: "1 / 5");
+            UIFactory.Layout(c.progressText, preferredWidth: 260);
+            c.nextButton = UIFactory.PrimaryButton(nav, "NextButton", null, 300);
+            c.nextButtonLabel = c.nextButton.GetComponentInChildren<Text>();
+            c.nextButtonLabel.text = Loc.Get("survey.next");
+
+            SaveScene(SceneNames.Survey);
         }
 
         private static void BuildEnd()

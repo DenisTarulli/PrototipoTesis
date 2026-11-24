@@ -27,6 +27,7 @@ namespace Prototipo
         private LocalDataStore store;
         private IDataUploader uploader;
         private float sessionStartRealtime;
+        private float surveyStartRealtime;
         private Func<PuzzleRecord> inProgressPuzzle;
         private SlotPlan? cachedPlan;
 
@@ -141,11 +142,32 @@ namespace Prototipo
             Save();
         }
 
-        public void FinishSession()
+        /// <summary>Terminó el último puzzle y falta la encuesta final.</summary>
+        public bool AwaitingSurvey => Current != null && Current.completed && !Current.surveyCompleted &&
+                                      string.IsNullOrEmpty(Current.endedAtUtc);
+
+        /// <summary>
+        /// Se jugaron todos los slots. El tiempo total de sesión (Anexo B) se fija acá, sin contar la encuesta.
+        /// La sesión se cierra y se sube recién al enviar la encuesta.
+        /// </summary>
+        public void FinishGameplay()
         {
             if (!HasActiveSession) return;
+            inProgressPuzzle = null;
             Current.completed = true;
-            Close();
+            Current.gameplayEndedAtUtc = DateTime.UtcNow.ToString("o");
+            UpdateTotalTime();
+            surveyStartRealtime = Time.realtimeSinceStartup;
+            Save();
+        }
+
+        public void SubmitSurvey(SurveyRecord survey)
+        {
+            if (!AwaitingSurvey || survey == null) return;
+            Current.survey = survey;
+            Current.surveyCompleted = true;
+            Current.surveySeconds = Time.realtimeSinceStartup - surveyStartRealtime;
+            Close(updateTotalTime: false);
         }
 
         public void AbandonSession()
@@ -158,7 +180,7 @@ namespace Prototipo
 
             Current.abandoned = true;
             Current.abandonedAtSlot = Mathf.Max(1, CurrentSlotIndex);
-            Close();
+            Close(updateTotalTime: true);
         }
 
         /// <summary>Descarta la sesión terminada (solo para volver al menú en pruebas).</summary>
@@ -183,11 +205,11 @@ namespace Prototipo
             }
         }
 
-        private void Close()
+        private void Close(bool updateTotalTime)
         {
             inProgressPuzzle = null;
             Current.endedAtUtc = DateTime.UtcNow.ToString("o");
-            UpdateTotalTime();
+            if (updateTotalTime) UpdateTotalTime();
             Save();
             TryUpload();
         }
@@ -214,6 +236,14 @@ namespace Prototipo
         {
             // Cerrar la ventana a mitad de la sesión cuenta como abandono. Queda guardado en disco.
             if (HasActiveSession) AbandonSession();
+
+            // Cerrar durante la encuesta: el juego quedó completo pero sin encuesta. Se guarda así
+            // (surveyCompleted = false) y queda pendiente de subida.
+            else if (AwaitingSurvey)
+            {
+                Current.endedAtUtc = DateTime.UtcNow.ToString("o");
+                Save();
+            }
         }
     }
 }

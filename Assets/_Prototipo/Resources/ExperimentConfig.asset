@@ -83,4 +83,4 @@ MonoBehaviour:
   adaptiveUpThreshold: 0.7
   adaptiveDownThreshold: 0.4
   buildLabel: 0.1.0
-  showDebugInfo: 0
+  showDebugInfo: 1

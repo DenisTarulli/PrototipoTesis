@@ -310,6 +310,81 @@ namespace Prototipo.EditorTools
             return slider;
         }
 
+        /// <summary>
+        /// Pregunta de la encuesta: texto arriba y una fila de opciones debajo. Si se pasan lowKey/highKey,
+        /// las etiquetas de los extremos van a los costados de la fila. Las opciones pueden ser números
+        /// literales (escala) o claves de texto.
+        /// </summary>
+        public static ChoiceSelector CreateSurveyQuestion(Transform parent, string name, string questionKey,
+                                                          string[] optionLabels, int[] values, bool labelsAreKeys,
+                                                          string lowKey = null, string highKey = null,
+                                                          float optionWidth = 76)
+        {
+            var group = NewRect(name, parent);
+            var vlg = group.gameObject.AddComponent<VerticalLayoutGroup>();
+            vlg.spacing = 8;
+            vlg.childAlignment = TextAnchor.UpperLeft;
+            vlg.childControlWidth = true;
+            vlg.childControlHeight = true;
+            vlg.childForceExpandWidth = true;
+            vlg.childForceExpandHeight = false;
+            var canvasGroup = group.gameObject.AddComponent<CanvasGroup>();
+
+            CreateText(group, "Question", questionKey, 25, UITheme.TextPrimary, TextAnchor.MiddleLeft, FontStyle.Bold);
+
+            var row = CreateRow(group, "Options", 10, TextAnchor.MiddleLeft);
+            if (lowKey != null)
+            {
+                var low = CreateText(row, "Low", lowKey, 18, UITheme.TextSecondary, TextAnchor.MiddleRight);
+                Layout(low, preferredWidth: 190);
+            }
+
+            var buttons = new Button[optionLabels.Length];
+            for (int i = 0; i < optionLabels.Length; i++)
+            {
+                bool isKey = labelsAreKeys;
+                buttons[i] = CreateButton(row, "Option" + (i + 1), isKey ? optionLabels[i] : null, UITheme.SurfaceAlt, UITheme.TextPrimary,
+                                          width: isKey ? Mathf.Max(optionWidth, 200) : optionWidth, height: 52, fontSize: isKey ? 21 : 24,
+                                          literal: isKey ? null : optionLabels[i]);
+            }
+
+            if (highKey != null)
+            {
+                var high = CreateText(row, "High", highKey, 18, UITheme.TextSecondary, TextAnchor.MiddleLeft);
+                Layout(high, preferredWidth: 190);
+            }
+
+            var selector = group.gameObject.AddComponent<ChoiceSelector>();
+            selector.buttons = buttons;
+            selector.values = values;
+            selector.group = canvasGroup;
+            return selector;
+        }
+
+        /// <summary>Campo de texto multilínea para respuestas abiertas.</summary>
+        public static InputField CreateInputField(Transform parent, string name, string placeholderKey, float height, int characterLimit)
+        {
+            var img = CreateImage(parent, name, UITheme.SurfaceAlt, true);
+            var input = img.gameObject.AddComponent<InputField>();
+            Layout(img, minHeight: height, preferredHeight: height);
+
+            var text = CreateText(img.transform, "Text", null, 22, UITheme.TextPrimary, TextAnchor.UpperLeft, literal: "");
+            Stretch(text.rectTransform, 16, 10, 16, 10);
+            text.supportRichText = false;
+
+            var placeholder = CreateText(img.transform, "Placeholder", placeholderKey, 22, UITheme.TextSecondary, TextAnchor.UpperLeft, FontStyle.Italic);
+            Stretch(placeholder.rectTransform, 16, 10, 16, 10);
+
+            input.textComponent = text;
+            input.placeholder = placeholder;
+            input.lineType = InputField.LineType.MultiLineNewline;
+            input.characterLimit = characterLimit;
+            input.targetGraphic = img;
+            input.caretColor = UITheme.TextPrimary;
+            input.selectionColor = new Color(UITheme.Primary.r, UITheme.Primary.g, UITheme.Primary.b, 0.4f);
+            return input;
+        }
+
         /// <summary>Fila con 5 botones (1-5) y etiquetas de los extremos debajo.</summary>
         public static RatingSelector CreateRating(Transform parent, string name, string lowKey, string highKey)
         {
