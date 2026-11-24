@@ -20,6 +20,7 @@ namespace Prototipo.EditorTools
         private static Sprite rounded, checkmark, knob, sliderBg;
 
         public static Font DefaultFont => font != null ? font : (font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
+        public static Sprite RoundedSprite => Rounded;
         private static Sprite Rounded => rounded != null ? rounded : (rounded = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd"));
         private static Sprite Checkmark => checkmark != null ? checkmark : (checkmark = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Checkmark.psd"));
         private static Sprite Knob => knob != null ? knob : (knob = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd"));
@@ -139,7 +140,7 @@ namespace Prototipo.EditorTools
             Anchor(rt, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(width, 200));
 
             var shadow = img.gameObject.AddComponent<Shadow>();
-            shadow.effectColor = new Color(0f, 0f, 0f, 0.08f);
+            shadow.effectColor = UITheme.Shadow;
             shadow.effectDistance = new Vector2(0f, -6f);
 
             var vlg = img.gameObject.AddComponent<VerticalLayoutGroup>();

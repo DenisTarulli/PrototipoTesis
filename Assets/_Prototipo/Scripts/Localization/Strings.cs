@@ -72,10 +72,37 @@ namespace Prototipo
             { "game.abandonConfirm", new[] { "¿Querés abandonar la sesión?\nLo registrado hasta ahora se va a guardar.", "Do you want to quit the session?\nEverything recorded so far will be saved." } },
             { "game.abandonYes", new[] { "Sí, abandonar", "Yes, quit" } },
             { "game.abandonNo", new[] { "Seguir jugando", "Keep playing" } },
-            { "game.placeholder", new[] { "Acá va a aparecer el puzzle.\n(Etapa 1: simulador para probar el flujo de datos)", "The puzzle will appear here.\n(Stage 1: simulator to test the data flow)" } },
             { "game.debugSolve", new[] { "Simular resuelto", "Simulate solved" } },
             { "game.debugError", new[] { "Simular error", "Simulate error" } },
             { "game.debugAttempt", new[] { "Simular nuevo intento", "Simulate new attempt" } },
+            { "game.notImplemented", new[] { "(Puzzle en desarrollo: usá los botones de simulación)", "(Puzzle in development: use the simulation buttons)" } },
+            { "game.timeUp", new[] { "Se acabó el tiempo. Pasamos al siguiente puzzle.", "Time's up. Moving on to the next puzzle." } },
+            { "game.solved", new[] { "¡Resuelto!", "Solved!" } },
+
+            // Tutoriales (se muestran la primera vez que aparece cada tipo)
+            { "tutorial.howTo", new[] { "Cómo se juega", "How to play" } },
+            { "tutorial.start", new[] { "Entendido, empezar", "Got it, start" } },
+            { "tutorial.Sequence", new[] {
+                "•  Algunos botones se van a iluminar uno por uno.\n" +
+                "•  Cuando termine, tocá los botones en el mismo orden.\n" +
+                "•  Son 3 rondas, cada una con una secuencia nueva.\n" +
+                "•  Si te equivocás, la secuencia se vuelve a mostrar y lo intentás de nuevo.\n" +
+                "•  La pista vuelve a mostrar la secuencia de la ronda.",
+                "•  Some buttons will light up one by one.\n" +
+                "•  When it finishes, press the buttons in the same order.\n" +
+                "•  There are 3 rounds, each with a new sequence.\n" +
+                "•  If you make a mistake, the sequence is shown again and you try again.\n" +
+                "•  The hint shows the round's sequence again." } },
+            { "tutorial.MemoryPairs", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
+            { "tutorial.Hanoi", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
+            { "tutorial.SlidingTiles", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
+
+            // Secuencias
+            { "seq.watch", new[] { "Mirá la secuencia  ·  ronda {0} de {1}", "Watch the sequence  ·  round {0} of {1}" } },
+            { "seq.yourTurn", new[] { "Tu turno: {0} / {1}", "Your turn: {0} / {1}" } },
+            { "seq.wrong", new[] { "Incorrecto. Mirá de nuevo.", "Wrong. Watch again." } },
+            { "seq.roundOk", new[] { "¡Bien!", "Well done!" } },
+            { "seq.done", new[] { "¡Resuelto!", "Solved!" } },
 
             // Tipos de puzzle
             { "puzzle.Sequence", new[] { "Secuencias", "Sequences" } },

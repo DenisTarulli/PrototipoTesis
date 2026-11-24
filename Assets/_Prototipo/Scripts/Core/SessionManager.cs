@@ -28,6 +28,7 @@ namespace Prototipo
         private IDataUploader uploader;
         private float sessionStartRealtime;
         private Func<PuzzleRecord> inProgressPuzzle;
+        private SlotPlan? cachedPlan;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStatics() => Instance = null;
@@ -83,6 +84,16 @@ namespace Prototipo
                 language = Loc.CurrentCode,
                 screenWidth = Screen.width,
                 screenHeight = Screen.height,
+                operatingSystem = SystemInfo.operatingSystem,
+                deviceType = SystemInfo.deviceType.ToString(),
+                processorType = SystemInfo.processorType,
+                processorCount = SystemInfo.processorCount,
+                systemMemoryMB = SystemInfo.systemMemorySize,
+                graphicsDevice = SystemInfo.graphicsDeviceName,
+                graphicsMemoryMB = SystemInfo.graphicsMemorySize,
+                screenDpi = Screen.dpi,
+                refreshRateHz = Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value),
+                fullScreenMode = Screen.fullScreenMode.ToString(),
                 consentGiven = consentGiven,
                 isAdult = isAdult,
                 priorGamingExperience = priorGaming,
@@ -92,6 +103,7 @@ namespace Prototipo
             };
 
             sessionStartRealtime = Time.realtimeSinceStartup;
+            cachedPlan = null;
             Upload = UploadState.None;
             Save();
             Debug.Log($"[SessionManager] Sesión {Current.participantCode} iniciada. Condición: {Current.condition}{(debugSession ? " (prueba)" : "")}");
@@ -99,8 +111,11 @@ namespace Prototipo
 
         public SlotPlan GetCurrentSlotPlan()
         {
+            // Se calcula una sola vez por slot: el proveedor adaptativo toma una decisión en cada llamada.
             int i = CurrentSlotIndex;
-            return difficulty.Plan(i, Config.slotTypes[i]);
+            if (cachedPlan == null || cachedPlan.Value.slotIndex != i)
+                cachedPlan = difficulty.Plan(i, Config.slotTypes[i]);
+            return cachedPlan.Value;
         }
 
         /// <summary>
@@ -112,6 +127,13 @@ namespace Prototipo
         public void RecordPuzzle(PuzzleRecord record)
         {
             if (Current == null || record == null) return;
+            var score = PerformanceScorer.Score(record, Config);
+            record.performanceScore = score.total;
+            record.scoreTime = score.time;
+            record.scoreErrors = score.errors;
+            record.scoreAttempts = score.attempts;
+            record.scoreHints = score.hints;
+
             Current.puzzles.Add(record);
             if (record.completed) Current.puzzlesCompleted++;
             difficulty?.ReportResult(record);
@@ -145,6 +167,7 @@ namespace Prototipo
             if (HasActiveSession) AbandonSession();
             Current = null;
             difficulty = null;
+            cachedPlan = null;
             Upload = UploadState.None;
         }
 

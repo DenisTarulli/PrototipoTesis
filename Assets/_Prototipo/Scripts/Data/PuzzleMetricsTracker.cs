@@ -28,6 +28,9 @@ namespace Prototipo
                 puzzleType = plan.type.ToString(),
                 difficultyTier = plan.tier,
                 difficultySource = plan.source,
+                previousTier = plan.previousTier,
+                decisionWindowAverage = plan.windowAverage,
+                decision = plan.decision,
                 startedAtUtc = DateTime.UtcNow.ToString("o"),
                 attempts = 1
             };

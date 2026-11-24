@@ -11,7 +11,7 @@ namespace Prototipo
     [Serializable]
     public class SessionRecord
     {
-        public const string CurrentSchemaVersion = "1";
+        public const string CurrentSchemaVersion = "2";
 
         // Identificación (anónima)
         public string schemaVersion = CurrentSchemaVersion;
@@ -30,6 +30,18 @@ namespace Prototipo
         public string language;
         public int screenWidth;
         public int screenHeight;
+
+        // Hardware (no identifica a la persona; sirve para controlar la variable de confusión "hardware")
+        public string operatingSystem;
+        public string deviceType;
+        public string processorType;
+        public int processorCount;
+        public int systemMemoryMB;
+        public string graphicsDevice;
+        public int graphicsMemoryMB;
+        public float screenDpi;
+        public int refreshRateHz;
+        public string fullScreenMode;
 
         // Consentimiento y perfil previo
         public bool consentGiven;
@@ -68,6 +80,17 @@ namespace Prototipo
         public bool completed;            // puzzle completado
         public bool timedOut;             // se agotó el tiempo
         public bool abandoned;            // el participante abandonó durante este puzzle
-        public float performanceScore = -1f; // puntaje usado por el sistema adaptativo (-1 = no aplica)
+
+        // Puntaje de desempeño 0-1 (se calcula en ambas condiciones; solo la adaptativa lo usa para decidir)
+        public float performanceScore = -1f;
+        public float scoreTime = -1f;
+        public float scoreErrors = -1f;
+        public float scoreAttempts = -1f;
+        public float scoreHints = -1f;
+
+        // Decisión tomada al asignar el tier de ESTE puzzle (condición adaptativa)
+        public int previousTier;            // tier del puzzle anterior (0 en el primero)
+        public float decisionWindowAverage = -1f; // promedio de la ventana usado para decidir (-1 = no hubo decisión)
+        public string decision;             // "up" | "down" | "keep" | "clamped_up" | "clamped_down" | "none"
     }
 }

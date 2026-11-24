@@ -6,8 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/_Prototipo/Scenes/MainMenu.unity
+    guid: d41ebc9f0a37e17488c0a23f31afa40c
+  - enabled: 1
+    path: Assets/_Prototipo/Scenes/Consent.unity
+    guid: 4db5d4f9da80d4a4cbb20c69188fcb07
+  - enabled: 1
+    path: Assets/_Prototipo/Scenes/Game.unity
+    guid: d7ae72bb49af3c34f95a51ec89b22946
+  - enabled: 1
+    path: Assets/_Prototipo/Scenes/End.unity
+    guid: 301305fde32c9104da90d2552e1e3d5f
   m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

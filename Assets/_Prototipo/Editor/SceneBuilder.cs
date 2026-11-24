@@ -33,6 +33,16 @@ namespace Prototipo.EditorTools
 
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
+            BuildAllWithoutDialogs();
+            EditorSceneManager.OpenScene(ScenePath(SceneNames.MainMenu));
+            EditorUtility.DisplayDialog("Listo",
+                "Escenas generadas y agregadas al build en este orden:\nMainMenu → Consent → Game → End.\n\n" +
+                "Abrí MainMenu y apretá Play para probar el flujo.", "OK");
+        }
+
+        /// <summary>Genera todas las escenas sin pedir confirmación (para automatizar).</summary>
+        public static void BuildAllWithoutDialogs()
+        {
             EnsureFolder("Assets", "_Prototipo");
             EnsureFolder(Root, "Scenes");
             EnsureFolder(Root, "Resources");
@@ -43,11 +53,6 @@ namespace Prototipo.EditorTools
             BuildGame();
             BuildEnd();
             UpdateBuildSettings();
-
-            EditorSceneManager.OpenScene(ScenePath(SceneNames.MainMenu));
-            EditorUtility.DisplayDialog("Listo",
-                "Escenas generadas y agregadas al build en este orden:\nMainMenu → Consent → Game → End.\n\n" +
-                "Abrí MainMenu y apretá Play para probar el flujo.", "OK");
         }
 
         [MenuItem("Tools/Prototipo/Seleccionar configuración del experimento", priority = 20)]
@@ -226,7 +231,8 @@ namespace Prototipo.EditorTools
         private static void BuildGame()
         {
             var root = NewScene();
-            var c = AddController<GamePlaceholderController>();
+            var c = AddController<GameController>();
+            c.roundedSprite = UIFactory.RoundedSprite;
 
             // Barra superior
             var top = Bar(root, "TopBar", top: true, height: 110);
@@ -235,14 +241,35 @@ namespace Prototipo.EditorTools
             c.timerText = UIFactory.CreateText(top, "Timer", null, 34, UITheme.TextSecondary, TextAnchor.MiddleRight, FontStyle.Bold, "03:00");
             UIFactory.Layout(c.timerText, preferredWidth: 200);
 
-            // Área central (placeholder del puzzle)
-            var area = UIFactory.CreateCard(root, "PuzzleArea", 1100, 56, 28);
-            c.infoText = UIFactory.CreateText(area, "Info", null, 40, UITheme.TextPrimary, TextAnchor.MiddleCenter, FontStyle.Bold, "Secuencias");
-            UIFactory.CreateText(area, "Placeholder", "game.placeholder", 26, UITheme.TextSecondary, TextAnchor.MiddleCenter);
-            var debug = UIFactory.CreateRow(area, "DebugPanel", 20);
-            c.solveButton = UIFactory.CreateButton(debug, "SolveButton", "game.debugSolve", UITheme.Accent, UITheme.TextOnColor, 280, 64, 24);
-            c.errorButton = UIFactory.CreateButton(debug, "ErrorButton", "game.debugError", UITheme.Danger, UITheme.TextOnColor, 240, 64, 24);
-            c.attemptButton = UIFactory.CreateButton(debug, "AttemptButton", "game.debugAttempt", UITheme.SurfaceAlt, UITheme.TextPrimary, 300, 64, 24);
+            // Área central: texto de estado arriba y tablero debajo (los puzzles lo llenan en tiempo de ejecución)
+            var area = UIFactory.CreateImage(root, "PuzzleArea", UITheme.Surface, true);
+            UIFactory.Anchor(area.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -5f), new Vector2(1240f, 760f));
+            var shadow = area.gameObject.AddComponent<Shadow>();
+            shadow.effectColor = UITheme.Shadow;
+            shadow.effectDistance = new Vector2(0f, -6f);
+
+            c.statusText = UIFactory.CreateText(area.transform, "Status", null, 32, UITheme.TextPrimary, TextAnchor.MiddleCenter, FontStyle.Bold, "Mirá la secuencia");
+            UIFactory.Anchor(c.statusText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -24f), new Vector2(1160f, 90f));
+
+            var board = UIFactory.NewRect("Board", area.transform);
+            UIFactory.Stretch(board, 40, 124, 40, 36);
+            c.board = board;
+
+            // Depuración: arriba a la izquierda, debajo de la barra superior
+            var debug = UIFactory.NewRect("DebugPanel", root);
+            UIFactory.Anchor(debug, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -116f), new Vector2(1870f, 56f));
+            var debugRow = debug.gameObject.AddComponent<HorizontalLayoutGroup>();
+            debugRow.spacing = 12;
+            debugRow.childAlignment = TextAnchor.MiddleLeft;
+            debugRow.childControlWidth = true;
+            debugRow.childControlHeight = true;
+            debugRow.childForceExpandWidth = false;
+            debugRow.childForceExpandHeight = false;
+            c.debugText = UIFactory.CreateText(debug, "DebugText", null, 18, UITheme.TextSecondary, TextAnchor.MiddleLeft, literal: "debug");
+            UIFactory.Layout(c.debugText, flexibleWidth: 1);
+            c.solveButton = UIFactory.CreateButton(debug, "SolveButton", "game.debugSolve", UITheme.Accent, UITheme.TextOnColor, 230, 48, 20);
+            c.errorButton = UIFactory.CreateButton(debug, "ErrorButton", "game.debugError", UITheme.Danger, UITheme.TextOnColor, 200, 48, 20);
+            c.attemptButton = UIFactory.CreateButton(debug, "AttemptButton", "game.debugAttempt", UITheme.SurfaceAlt, UITheme.TextPrimary, 260, 48, 20);
             c.debugPanel = debug.gameObject;
 
             // Barra inferior
@@ -252,6 +279,16 @@ namespace Prototipo.EditorTools
             UIFactory.Layout(c.hintCounterText, preferredWidth: 80);
             UIFactory.CreateSpacer(bottom, 0, 1);
             c.abandonButton = UIFactory.CreateButton(bottom, "AbandonButton", "game.abandon", UITheme.Danger, UITheme.TextOnColor, 260, 72, 28);
+
+            // Tutorial (primera vez que aparece cada tipo de puzzle)
+            var tutorial = UIFactory.CreateOverlay(root, "TutorialPanel", 900, out var tut);
+            c.tutorialTitleText = UIFactory.CreateText(tut, "Title", null, 44, UITheme.TextPrimary, TextAnchor.MiddleCenter, FontStyle.Bold, "Secuencias");
+            UIFactory.CreateText(tut, "Subtitle", "tutorial.howTo", 24, UITheme.TextSecondary, TextAnchor.MiddleCenter);
+            c.tutorialBodyText = UIFactory.CreateText(tut, "Body", null, 28, UITheme.TextPrimary, TextAnchor.UpperLeft, literal: Loc.Get("tutorial.Sequence"));
+            UIFactory.CreateSpacer(tut, 4);
+            c.tutorialButton = UIFactory.PrimaryButton(tut, "StartButton", "tutorial.start");
+            c.tutorialPanel = tutorial;
+            tutorial.SetActive(false);
 
             // Confirmación de abandono
             var overlay = UIFactory.CreateOverlay(root, "ConfirmPanel", 760, out var confirm);
