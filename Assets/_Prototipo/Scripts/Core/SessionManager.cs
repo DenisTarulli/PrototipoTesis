@@ -53,9 +53,10 @@ namespace Prototipo
             Instance = this;
             Config = ExperimentConfig.LoadOrDefault();
             store = new LocalDataStore();
-            uploader = new NullUploader();
+            uploader = SupabaseUploader.IsConfigured(Config) ? new SupabaseUploader(Config) : (IDataUploader)new NullUploader();
             SettingsService.Load();
             Debug.Log($"[SessionManager] Datos locales en: {store.RootFolder}");
+            StartCoroutine(UploadPendingFromPreviousRuns());
         }
 
         // ---------------------------------------------------------------- Ciclo de sesión
@@ -183,6 +184,17 @@ namespace Prototipo
             Close(updateTotalTime: true);
         }
 
+        /// <summary>Reintenta la subida de la sesión actual si quedó pendiente (botón de la pantalla final).</summary>
+        public void RetryUpload()
+        {
+            if (Current != null && Upload == UploadState.Pending) TryUpload();
+        }
+
+        /// <summary>Ruta del archivo local de la sesión actual (respaldo para enviarlo a mano).</summary>
+        public string CurrentSessionFile => Current != null
+            ? System.IO.Path.Combine(store.PendingFolder, Current.sessionId + ".json")
+            : null;
+
         /// <summary>Descarta la sesión terminada (solo para volver al menú en pruebas).</summary>
         public void ClearSession()
         {
@@ -230,6 +242,29 @@ namespace Prototipo
                 if (ok) store.MarkUploaded(record.sessionId);
                 Upload = ok ? UploadState.Uploaded : UploadState.Pending;
             }));
+        }
+
+        /// <summary>
+        /// Al abrir el juego, reintenta subir las sesiones que quedaron pendientes en ejecuciones anteriores
+        /// (sin conexión, cierre durante la encuesta, cierre inesperado). Se hace en segundo plano.
+        /// </summary>
+        private System.Collections.IEnumerator UploadPendingFromPreviousRuns()
+        {
+            if (uploader is NullUploader) yield break;
+
+            foreach (string path in store.GetPendingFiles())
+            {
+                var record = store.Load(path);
+                if (record == null || string.IsNullOrEmpty(record.sessionId)) continue;
+                if (Current != null && Current.sessionId == record.sessionId) continue; // la sesión en curso no
+
+                // Una sesión de una ejecución anterior que nunca se cerró (corte de luz, cierre forzado) se sube
+                // igual: queda marcada como no completada y sin endedAtUtc.
+                yield return uploader.Upload(record, ok =>
+                {
+                    if (ok) store.MarkUploaded(record.sessionId);
+                });
+            }
         }
 
         private void OnApplicationQuit()

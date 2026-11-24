@@ -399,6 +399,23 @@ namespace Prototipo.EditorTools
             c.codeText = UIFactory.CreateText(card, "Code", null, 30, UITheme.TextPrimary, TextAnchor.MiddleCenter, FontStyle.Bold,
                 Loc.Format("end.code", "XXXXXX"));
             c.statusText = UIFactory.CreateText(card, "Status", null, 24, UITheme.TextSecondary, TextAnchor.MiddleCenter, literal: "");
+
+            // Respaldo: solo visible si la subida falló
+            var pending = UIFactory.NewRect("PendingPanel", card);
+            var pvlg = pending.gameObject.AddComponent<VerticalLayoutGroup>();
+            pvlg.spacing = 14;
+            pvlg.childAlignment = TextAnchor.UpperCenter;
+            pvlg.childControlWidth = true;
+            pvlg.childControlHeight = true;
+            pvlg.childForceExpandWidth = true;
+            pvlg.childForceExpandHeight = false;
+            UIFactory.CreateText(pending, "Help", "end.pendingHelp", 22, UITheme.Warm, TextAnchor.MiddleCenter);
+            var pendingButtons = UIFactory.CreateRow(pending, "PendingButtons", 20);
+            c.retryButton = UIFactory.SecondaryButton(pendingButtons, "RetryButton", "end.retry", 300);
+            c.openFolderButton = UIFactory.SecondaryButton(pendingButtons, "OpenFolderButton", "end.openFolder", 340);
+            c.pendingPanel = pending.gameObject;
+            pending.gameObject.SetActive(false);
+
             var buttons = UIFactory.CreateRow(card, "Buttons", 24);
             c.menuButton = UIFactory.SecondaryButton(buttons, "MenuButton", "end.menu", 360);
             c.quitButton = UIFactory.PrimaryButton(buttons, "QuitButton", "end.quit", 240);

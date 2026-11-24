@@ -204,7 +204,12 @@ namespace Prototipo
             { "end.code", new[] { "Código de participante: {0}", "Participant code: {0}" } },
             { "end.status.uploading", new[] { "Enviando datos...", "Sending data..." } },
             { "end.status.uploaded", new[] { "Datos enviados correctamente.", "Data sent successfully." } },
-            { "end.status.pending", new[] { "Los datos quedaron guardados en esta computadora y se enviarán más adelante.", "The data was saved on this computer and will be sent later." } },
+            { "end.status.pending", new[] { "No se pudieron enviar los datos (¿sin conexión?). Quedaron guardados en esta computadora.", "The data could not be sent (no connection?). It was saved on this computer." } },
+            { "end.pendingHelp", new[] {
+                "Podés reintentar el envío. Si sigue sin funcionar, tocá «Mostrar archivo» y mandale ese archivo al investigador: no contiene datos personales. Si volvés a abrir el juego con conexión, también se envía solo.",
+                "You can retry sending. If it still fails, press \"Show file\" and send that file to the researcher: it contains no personal data. If you open the game again with a connection, it is also sent automatically." } },
+            { "end.retry", new[] { "Reintentar envío", "Retry sending" } },
+            { "end.openFolder", new[] { "Mostrar archivo", "Show file" } },
             { "end.quit", new[] { "Salir", "Quit" } },
             { "end.menu", new[] { "Volver al menú (prueba)", "Back to menu (test)" } },
         };

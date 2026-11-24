@@ -61,6 +61,19 @@ namespace Prototipo
         [Tooltip("Si el promedio es menor o igual, se baja un tier. Entre ambos umbrales se mantiene (histéresis).")]
         [Range(0f, 1f)] public float adaptiveDownThreshold = 0.40f;
 
+        [Header("Subida de datos (Supabase)")]
+        [Tooltip("Si está apagado, las sesiones quedan solo en disco.")]
+        public bool uploadEnabled = true;
+
+        [Tooltip("URL base del proyecto, sin /rest/v1. Ej: https://xxxx.supabase.co")]
+        public string supabaseUrl = "https://pxsxwbgashoressryqyk.supabase.co";
+
+        [Tooltip("Clave PUBLISHABLE (sb_publishable_...). Es pública por diseño: la tabla solo permite insertar. " +
+                 "NUNCA poner acá la clave secret / service_role.")]
+        public string supabasePublishableKey = "sb_publishable_lWEzRDz6k4meeBhcnlON3w_sA5H5oY-";
+
+        public string supabaseTable = "sessions";
+
         [Header("Build")]
         public string buildLabel = "0.1.0";
 
