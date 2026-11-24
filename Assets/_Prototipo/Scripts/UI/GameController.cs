@@ -29,6 +29,7 @@ namespace Prototipo
         public Button solveButton;
         public Button errorButton;
         public Button attemptButton;
+        public Button skipButton;
 
         [Header("Barra inferior")]
         public Button hintButton;
@@ -77,6 +78,12 @@ namespace Prototipo
             solveButton.onClick.AddListener(() => { if (tracker.IsRunning) ReportSolved(); });
             errorButton.onClick.AddListener(ReportError);
             attemptButton.onClick.AddListener(ReportNewAttempt);
+            // DESARROLLO: salta el puzzle como no completado. Solo visible con showDebugInfo (apagado en los builds).
+            if (skipButton != null)
+                skipButton.onClick.AddListener(() => { if (tracker.IsRunning) StartCoroutine(EndSlot(false, false, skipped: true)); });
+            else
+                Debug.LogWarning("[Game] La escena Game es de una versión anterior (falta el botón Saltar). " +
+                                 "Ejecutá Tools > Prototipo > Construir escenas.");
             hintButton.onClick.AddListener(UseHint);
             abandonButton.onClick.AddListener(() => confirmPanel.SetActive(true));
             confirmNoButton.onClick.AddListener(() => confirmPanel.SetActive(false));
@@ -126,7 +133,8 @@ namespace Prototipo
                 case PuzzleType.Sequence: return gameObject.AddComponent<SequencePuzzle>();
                 case PuzzleType.MemoryPairs: return gameObject.AddComponent<MemoryPairsPuzzle>();
                 case PuzzleType.Hanoi: return gameObject.AddComponent<HanoiPuzzle>();
-                default: return null; // todavía no implementado: se usa el simulador
+                case PuzzleType.SlidingTiles: return gameObject.AddComponent<SlidingTilesPuzzle>();
+                default: return null; // tipo desconocido: se usa el simulador
             }
         }
 
@@ -166,16 +174,21 @@ namespace Prototipo
             RefreshHint();
         }
 
-        private IEnumerator EndSlot(bool solved, bool timedOut)
+        private IEnumerator EndSlot(bool solved, bool timedOut, bool skipped = false)
         {
             if (slotEnding) yield break;
             slotEnding = true;
 
             var record = tracker.Complete(solved, timedOut); // el tiempo se corta acá, no después de la pausa
+            record.debugSkipped = skipped;
             if (puzzle != null) puzzle.Stop();
             RefreshHint();
 
-            if (timedOut)
+            if (skipped)
+            {
+                SetStatus(Loc.Get("game.skipped"));
+            }
+            else if (timedOut)
             {
                 ShowTime(0f);
                 SetStatus(Loc.Get("game.timeUp"));

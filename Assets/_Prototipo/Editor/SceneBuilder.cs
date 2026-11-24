@@ -270,6 +270,7 @@ namespace Prototipo.EditorTools
             c.solveButton = UIFactory.CreateButton(debug, "SolveButton", "game.debugSolve", UITheme.Accent, UITheme.TextOnColor, 230, 48, 20);
             c.errorButton = UIFactory.CreateButton(debug, "ErrorButton", "game.debugError", UITheme.Danger, UITheme.TextOnColor, 200, 48, 20);
             c.attemptButton = UIFactory.CreateButton(debug, "AttemptButton", "game.debugAttempt", UITheme.SurfaceAlt, UITheme.TextPrimary, 260, 48, 20);
+            c.skipButton = UIFactory.CreateButton(debug, "SkipButton", "game.debugSkip", UITheme.Warm, UITheme.TextOnColor, 200, 48, 20);
             c.debugPanel = debug.gameObject;
 
             // Barra inferior

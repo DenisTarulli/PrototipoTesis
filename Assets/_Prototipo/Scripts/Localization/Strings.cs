@@ -78,6 +78,8 @@ namespace Prototipo
             { "game.notImplemented", new[] { "(Puzzle en desarrollo: usá los botones de simulación)", "(Puzzle in development: use the simulation buttons)" } },
             { "game.timeUp", new[] { "Se acabó el tiempo. Pasamos al siguiente puzzle.", "Time's up. Moving on to the next puzzle." } },
             { "game.solved", new[] { "¡Resuelto!", "Solved!" } },
+            { "game.debugSkip", new[] { "Saltar puzzle", "Skip puzzle" } },
+            { "game.skipped", new[] { "(Puzzle salteado: depuración)", "(Puzzle skipped: debug)" } },
 
             // Tutoriales (se muestran la primera vez que aparece cada tipo)
             { "tutorial.howTo", new[] { "Cómo se juega", "How to play" } },
@@ -115,7 +117,17 @@ namespace Prototipo
                 "•  Only one disc moves at a time, and it can never sit on a smaller one.\n" +
                 "•  At the top you see your moves and the minimum possible. \"Restart\" resets everything.\n" +
                 "•  The hint shows the next convenient move." } },
-            { "tutorial.SlidingTiles", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
+            { "tutorial.SlidingTiles", new[] {
+                "•  Ordená las fichas de menor a mayor (1, 2, 3...), de izquierda a derecha y de arriba hacia abajo.\n" +
+                "•  El hueco tiene que quedar abajo a la derecha.\n" +
+                "•  Tocá una ficha que esté al lado del hueco para deslizarla.\n" +
+                "•  Las fichas de una misma fila final tienen el mismo color. «Reiniciar» vuelve al tablero inicial.\n" +
+                "•  La pista marca cuál es la próxima ficha conveniente para mover.",
+                "•  Put the tiles in order (1, 2, 3...), left to right and top to bottom.\n" +
+                "•  The empty space must end up in the bottom-right corner.\n" +
+                "•  Tap a tile next to the empty space to slide it.\n" +
+                "•  Tiles that belong in the same final row share a color. \"Restart\" goes back to the initial board.\n" +
+                "•  The hint shows the next convenient tile to move." } },
 
             // Secuencias
             { "seq.watch", new[] { "Mirá la secuencia  ·  ronda {0} de {1}", "Watch the sequence  ·  round {0} of {1}" } },
@@ -135,6 +147,12 @@ namespace Prototipo
             { "hanoi.hint", new[] { "Pista: mové el disco de arriba de la torre {0} a la torre {1}.", "Hint: move the top disc from tower {0} to tower {1}." } },
             { "hanoi.restart", new[] { "Reiniciar", "Restart" } },
             { "hanoi.done", new[] { "¡Resuelto en {0} movimientos! (mínimo {1})", "Solved in {0} moves! (minimum {1})" } },
+
+            // Fichas deslizantes
+            { "tiles.status", new[] { "Movimientos: {0}  ·  mínimo posible: {1}", "Moves: {0}  ·  minimum possible: {1}" } },
+            { "tiles.invalid", new[] { "Esa ficha no está al lado del hueco.", "That tile is not next to the empty space." } },
+            { "tiles.hint", new[] { "Pista: mové la ficha {0}.", "Hint: move tile {0}." } },
+            { "tiles.done", new[] { "¡Resuelto en {0} movimientos! (mínimo {1})", "Solved in {0} moves! (minimum {1})" } },
 
             // Tipos de puzzle
             { "puzzle.Sequence", new[] { "Secuencias", "Sequences" } },

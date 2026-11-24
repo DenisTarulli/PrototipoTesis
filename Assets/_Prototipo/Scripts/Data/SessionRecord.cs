@@ -80,6 +80,7 @@ namespace Prototipo
         public bool completed;            // puzzle completado
         public bool timedOut;             // se agotó el tiempo
         public bool abandoned;            // el participante abandonó durante este puzzle
+        public bool debugSkipped;         // DESARROLLO: salteado con el botón de depuración (nunca en el experimento)
 
         // Eficiencia (solo en puzzles de movimientos: Hanoi, Fichas). -1 = no aplica.
         // No entra en el puntaje adaptativo (la tesis usa tiempo, errores, intentos y ayudas); queda para el análisis.
