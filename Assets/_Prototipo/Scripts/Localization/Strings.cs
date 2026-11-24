@@ -104,7 +104,17 @@ namespace Prototipo
                 "•  If they don't match, they turn back over: try to remember where each one was.\n" +
                 "•  The puzzle ends when you find all the pairs.\n" +
                 "•  The hint shows all the cards for a moment." } },
-            { "tutorial.Hanoi", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
+            { "tutorial.Hanoi", new[] {
+                "•  Pasá todos los discos de la torre A a la torre C.\n" +
+                "•  Tocá una torre para levantar su disco de arriba y otra torre para dejarlo.\n" +
+                "•  Solo se mueve un disco por vez, y nunca puede quedar sobre uno más chico.\n" +
+                "•  Arriba ves tus movimientos y el mínimo posible. «Reiniciar» vuelve todo al comienzo.\n" +
+                "•  La pista marca cuál es el próximo movimiento conveniente.",
+                "•  Move all the discs from tower A to tower C.\n" +
+                "•  Tap a tower to lift its top disc, then tap another tower to drop it.\n" +
+                "•  Only one disc moves at a time, and it can never sit on a smaller one.\n" +
+                "•  At the top you see your moves and the minimum possible. \"Restart\" resets everything.\n" +
+                "•  The hint shows the next convenient move." } },
             { "tutorial.SlidingTiles", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
 
             // Secuencias
@@ -118,6 +128,13 @@ namespace Prototipo
             { "pairs.status", new[] { "Pares encontrados: {0} / {1}", "Pairs found: {0} / {1}" } },
             { "pairs.hint", new[] { "Mirá bien...", "Take a good look..." } },
             { "pairs.done", new[] { "¡Resuelto!", "Solved!" } },
+
+            // Torre de Hanoi
+            { "hanoi.status", new[] { "Movimientos: {0}  ·  mínimo posible: {1}", "Moves: {0}  ·  minimum possible: {1}" } },
+            { "hanoi.illegal", new[] { "No se puede: un disco no puede ir sobre uno más chico.", "Not allowed: a disc can't go on a smaller one." } },
+            { "hanoi.hint", new[] { "Pista: mové el disco de arriba de la torre {0} a la torre {1}.", "Hint: move the top disc from tower {0} to tower {1}." } },
+            { "hanoi.restart", new[] { "Reiniciar", "Restart" } },
+            { "hanoi.done", new[] { "¡Resuelto en {0} movimientos! (mínimo {1})", "Solved in {0} moves! (minimum {1})" } },
 
             // Tipos de puzzle
             { "puzzle.Sequence", new[] { "Secuencias", "Sequences" } },

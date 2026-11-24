@@ -81,6 +81,11 @@ namespace Prototipo
         public bool timedOut;             // se agotó el tiempo
         public bool abandoned;            // el participante abandonó durante este puzzle
 
+        // Eficiencia (solo en puzzles de movimientos: Hanoi, Fichas). -1 = no aplica.
+        // No entra en el puntaje adaptativo (la tesis usa tiempo, errores, intentos y ayudas); queda para el análisis.
+        public int moves = -1;            // movimientos válidos realizados
+        public int optimalMoves = -1;     // mínimo teórico (Hanoi) o referencia del tablero (Fichas)
+
         // Puntaje de desempeño 0-1 (se calcula en ambas condiciones; solo la adaptativa lo usa para decidir)
         public float performanceScore = -1f;
         public float scoreTime = -1f;

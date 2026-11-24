@@ -125,6 +125,7 @@ namespace Prototipo
             {
                 case PuzzleType.Sequence: return gameObject.AddComponent<SequencePuzzle>();
                 case PuzzleType.MemoryPairs: return gameObject.AddComponent<MemoryPairsPuzzle>();
+                case PuzzleType.Hanoi: return gameObject.AddComponent<HanoiPuzzle>();
                 default: return null; // todavía no implementado: se usa el simulador
             }
         }
@@ -219,6 +220,8 @@ namespace Prototipo
         }
 
         public void SetStatus(string text) => statusText.text = text;
+
+        public void ReportMoves(int moves, int optimalMoves) => tracker.SetMoves(moves, optimalMoves);
 
         // ------------------------------------------------------------ Pistas y abandono
 

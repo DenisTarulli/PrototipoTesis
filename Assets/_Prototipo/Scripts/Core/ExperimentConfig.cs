@@ -146,7 +146,7 @@ namespace Prototipo
         {
             new PuzzleTuning { type = PuzzleType.Sequence,     targetSeconds = new float[] { 20, 25, 30, 40, 50 },   errorTolerance = new float[] { 2, 2, 2, 3, 3 } },
             new PuzzleTuning { type = PuzzleType.MemoryPairs,  targetSeconds = new float[] { 25, 40, 55, 75, 95 },   errorTolerance = new float[] { 2, 3, 4, 5, 6 } },
-            new PuzzleTuning { type = PuzzleType.Hanoi,        targetSeconds = new float[] { 20, 35, 60, 100, 150 }, errorTolerance = new float[] { 2, 3, 3, 4, 5 } },
+            new PuzzleTuning { type = PuzzleType.Hanoi,        targetSeconds = new float[] { 12, 25, 50, 90, 140 }, errorTolerance = new float[] { 2, 3, 3, 4, 5 } },
             new PuzzleTuning { type = PuzzleType.SlidingTiles, targetSeconds = new float[] { 30, 45, 70, 100, 140 }, errorTolerance = new float[] { 5, 5, 5, 5, 5 } },
         };
     }

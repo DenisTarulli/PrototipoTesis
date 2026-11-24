@@ -55,11 +55,11 @@ MonoBehaviour:
     - 6
   - type: 2
     targetSeconds:
-    - 20
-    - 35
-    - 60
-    - 100
-    - 150
+    - 12
+    - 25
+    - 50
+    - 90
+    - 140
     errorTolerance:
     - 2
     - 3

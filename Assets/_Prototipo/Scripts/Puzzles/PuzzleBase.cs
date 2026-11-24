@@ -18,6 +18,9 @@ namespace Prototipo
 
         /// <summary>Texto de estado o instrucción breve que se muestra arriba del tablero.</summary>
         void SetStatus(string text);
+
+        /// <summary>Movimientos realizados y mínimo de referencia (puzzles de movimientos). Se guarda para el análisis.</summary>
+        void ReportMoves(int moves, int optimalMoves);
     }
 
     /// <summary>

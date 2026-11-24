@@ -53,6 +53,13 @@ namespace Prototipo
             if (IsRunning) record.hintsUsed++;
         }
 
+        public void SetMoves(int moves, int optimalMoves)
+        {
+            if (!IsRunning) return;
+            record.moves = moves;
+            record.optimalMoves = optimalMoves;
+        }
+
         public PuzzleRecord Complete(bool solved, bool timedOut)
         {
             return Close(r =>
