@@ -48,11 +48,11 @@ MonoBehaviour:
     - 75
     - 95
     errorTolerance:
+    - 2
+    - 3
     - 4
+    - 5
     - 6
-    - 8
-    - 10
-    - 12
   - type: 2
     targetSeconds:
     - 20

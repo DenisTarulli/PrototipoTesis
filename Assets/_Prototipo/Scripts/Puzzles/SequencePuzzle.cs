@@ -34,18 +34,7 @@ namespace Prototipo
         public const int Rounds = 3;
 
         // Colores apagados y distinguibles; cada botón además lleva un número (no depender solo del color).
-        private static readonly Color32[] PadColors =
-        {
-            new Color32(0x7F, 0xA6, 0xC9, 0xFF), // azul
-            new Color32(0x8C, 0xBF, 0x9C, 0xFF), // verde
-            new Color32(0xD9, 0xB0, 0x87, 0xFF), // ámbar
-            new Color32(0xC2, 0x9B, 0xD1, 0xFF), // lila
-            new Color32(0xD3, 0x8E, 0x8E, 0xFF), // rosa
-            new Color32(0x86, 0xC5, 0xC4, 0xFF), // turquesa
-            new Color32(0xD8, 0xCF, 0x86, 0xFF), // amarillo
-            new Color32(0xA9, 0xB4, 0xC2, 0xFF), // gris azulado
-            new Color32(0xC9, 0xA4, 0x8C, 0xFF), // terracota
-        };
+        private static Color32[] PadColors => PuzzlePalette.Pieces;
 
         private const float DimFactor = 0.38f;
 

@@ -93,7 +93,17 @@ namespace Prototipo
                 "•  There are 3 rounds, each with a new sequence.\n" +
                 "•  If you make a mistake, the sequence is shown again and you try again.\n" +
                 "•  The hint shows the round's sequence again." } },
-            { "tutorial.MemoryPairs", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
+            { "tutorial.MemoryPairs", new[] {
+                "•  Todas las cartas están boca abajo.\n" +
+                "•  Tocá dos cartas para darlas vuelta. Si son iguales, quedan descubiertas.\n" +
+                "•  Si no coinciden, se vuelven a dar vuelta: tratá de recordar dónde estaba cada una.\n" +
+                "•  El puzzle termina cuando encontrás todos los pares.\n" +
+                "•  La pista muestra todas las cartas por un instante.",
+                "•  All cards are face down.\n" +
+                "•  Tap two cards to turn them over. If they match, they stay face up.\n" +
+                "•  If they don't match, they turn back over: try to remember where each one was.\n" +
+                "•  The puzzle ends when you find all the pairs.\n" +
+                "•  The hint shows all the cards for a moment." } },
             { "tutorial.Hanoi", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
             { "tutorial.SlidingTiles", new[] { "(Tutorial pendiente)", "(Tutorial pending)" } },
 
@@ -103,6 +113,11 @@ namespace Prototipo
             { "seq.wrong", new[] { "Incorrecto. Mirá de nuevo.", "Wrong. Watch again." } },
             { "seq.roundOk", new[] { "¡Bien!", "Well done!" } },
             { "seq.done", new[] { "¡Resuelto!", "Solved!" } },
+
+            // Pares de memoria
+            { "pairs.status", new[] { "Pares encontrados: {0} / {1}", "Pairs found: {0} / {1}" } },
+            { "pairs.hint", new[] { "Mirá bien...", "Take a good look..." } },
+            { "pairs.done", new[] { "¡Resuelto!", "Solved!" } },
 
             // Tipos de puzzle
             { "puzzle.Sequence", new[] { "Secuencias", "Sequences" } },

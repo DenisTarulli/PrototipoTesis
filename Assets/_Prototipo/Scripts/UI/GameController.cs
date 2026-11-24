@@ -124,6 +124,7 @@ namespace Prototipo
             switch (type)
             {
                 case PuzzleType.Sequence: return gameObject.AddComponent<SequencePuzzle>();
+                case PuzzleType.MemoryPairs: return gameObject.AddComponent<MemoryPairsPuzzle>();
                 default: return null; // todavía no implementado: se usa el simulador
             }
         }
